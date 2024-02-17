@@ -13,6 +13,11 @@
 
 <body>
     <main class="m-4">
+        @if (session('success'))
+            <div class="alert alert-success bg-emerald-300 py-2 rounded-md mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
         @yield('main')
     </main>
 </body>
