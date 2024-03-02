@@ -17,7 +17,7 @@ class ArticlesController extends Controller
     {
         // $articles = Article::orderByDesc('created_at')->get();
         // $articles = Article::cursorPaginate(4);
-        $articles = Article::orderByDesc('created_at')->paginate(4);
+        $articles = Article::with('user')->orderByDesc('created_at')->paginate(4);
         return view('articles.index', ['articles' => $articles]);
     }
 
