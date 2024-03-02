@@ -10,7 +10,7 @@ class ArticlesController extends Controller
     //
     public function __construct()
     {
-        $this->middleware('auth')->except('index');
+        $this->middleware('auth')->except(['index', 'show']);
     }
 
     public function index()
@@ -19,6 +19,12 @@ class ArticlesController extends Controller
         // $articles = Article::cursorPaginate(4);
         $articles = Article::orderByDesc('created_at')->paginate(4);
         return view('articles.index', ['articles' => $articles]);
+    }
+
+    public function show($article_id)
+    {
+        $article = Article::where('id', $article_id)->first();
+        return view('articles.show', ['article' => $article]);
     }
 
     public function create()
@@ -52,5 +58,11 @@ class ArticlesController extends Controller
 
         auth()->user()->articles()->firstWhere('id', $article_id)->update(['title' => $data['title'], 'content' => $data['content']]);
         return redirect()->route('root')->with('success', '編輯成功');
+    }
+
+    public function destroy($article_id)
+    {
+        auth()->user()->articles()->firstWhere('id', $article_id)->delete();
+        return redirect()->route('root')->with('success', '刪除成功');
     }
 }
