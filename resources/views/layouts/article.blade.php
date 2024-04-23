@@ -18,6 +18,11 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if (session('error'))
+            <div class="alert alert-error bg-rose-300 py-2 rounded-md mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
         @yield('main')
     </main>
 </body>

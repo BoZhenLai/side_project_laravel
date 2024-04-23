@@ -46,7 +46,12 @@ class ArticlesController extends Controller
     {
         $data = auth()->user()->articles()->firstWhere('id', $article_id);
         // $data = Article::find($article_id);
-        return view('articles.edit', ['article' => $data]);
+
+        if (isset($data)) {
+            return view('articles.edit', ['article' => $data]);
+        } else {
+            return redirect()->route('root')->with('error', '權限不足');
+        }
     }
 
     public function update(Request $request, $article_id)
