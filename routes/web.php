@@ -21,6 +21,7 @@ use App\Http\Controllers\ArticlesController;
 Route::resource('articles', ArticlesController::class);
 // 設定首頁為文章功能的index
 Route::get('/', [ArticlesController::class, 'index'])->name('root');
+Route::get('/articles/{article}/export', [ArticlesController::class, 'export'])->name('articles.export');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
     Route::get('/dashboard', function () {

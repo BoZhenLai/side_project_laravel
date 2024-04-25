@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Article;
+use Dompdf\Dompdf;
 
+// require 'vendor/autoload.php';
 class ArticlesController extends Controller
 {
     //
@@ -25,6 +27,29 @@ class ArticlesController extends Controller
     {
         $article = Article::where('id', $article_id)->first();
         return view('articles.show', ['article' => $article]);
+    }
+
+    public function export($article_id)
+    {
+        $article = Article::where('id', $article_id)->first();
+
+        // get contents of a file into a string
+        // $filename = __DIR__ . "/pdf.temple.blade.html";
+        // $handle = fopen($filename, "r");
+        // $contents = fread($handle, filesize($filename));
+        // fclose($handle);
+
+        // $contents = str_replace('{title}', $article['title'], $contents);
+        // $contents = str_replace('{user_name}', $article->user['name'], $contents);
+        // $contents = str_replace('{content}', $article['content'], $contents);
+
+        $contents = view('pdf.temple', ['article' => $article])->render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($contents);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+        $dompdf->stream($article['title'] . '.pdf', ['Attachment' => false]);
     }
 
     public function create()
