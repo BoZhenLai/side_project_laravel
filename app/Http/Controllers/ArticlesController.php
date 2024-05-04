@@ -92,7 +92,15 @@ class ArticlesController extends Controller
 
     public function destroy($article_id)
     {
-        auth()->user()->articles()->firstWhere('id', $article_id)->delete();
-        return redirect()->route('root')->with('success', '刪除成功');
+        $data = auth()->user()->articles()->firstWhere('id', $article_id);
+        // $data = Article::find($article_id);
+
+        // auth()->user()->articles()->firstWhere('id', $article_id)->delete();
+        if (isset($data)) {
+            $data->delete();
+            return redirect()->route('root')->with('success', '刪除成功');
+        } else {
+            return redirect()->route('root')->with('error', '權限不足');
+        }
     }
 }
